@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.todo.Controllers.ListController">
+   <children>
+      <TextField fx:id="inpuTextField" layoutX="198.0" layoutY="86.0" prefHeight="40.0" prefWidth="225.0" promptText="Create New ToDo" />
+      <Button fx:id="addToHead" layoutX="430.0" layoutY="86.0" mnemonicParsing="false" onAction="#AddButton" prefHeight="39.0" prefWidth="36.0" style="-fx-font-size: 16;" stylesheets="@../Styles/1.css" text="+">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <ListView fx:id="listView" layoutX="199.0" layoutY="145.0" prefHeight="200.0" prefWidth="225.0" stylesheets="@../Styles/1.css" />
+      <Label fx:id="Name" layoutX="408.0" layoutY="20.0" prefHeight="17.0" prefWidth="101.0" />
+      <Label layoutX="46.0" layoutY="20.0" text="BigFirm ToDo" />
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="381.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Styles/avatar.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="510.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Styles/logout.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="534.0" layoutY="16.0" mnemonicParsing="false" onAction="#LogoutButton" stylesheets="@../Styles/1.css" text="Logout" />
+   </children>
+</AnchorPane>

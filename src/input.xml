@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<XmlSource>
+    <age>12</age>
+    <user>
+        <login>John</login>
+        <password>Smith</password>
+        <tasks>Make some coffee  Is done</tasks>
+        <tasks>Start working</tasks>
+        <tasks>Azazaz Is done</tasks>
+    </user>
+    <user>
+        <login>zasasd</login>
+        <password>1xxx1x1</password>
+        <tasks>2Lol Is done</tasks>
+        <tasks>2Lol2 Is done</tasks>
+        <tasks>2Lasd</tasks>
+        <tasks>2Lxc</tasks>
+    </user>
+</XmlSource>

@@ -1,0 +1,27 @@
+.button {
+    -fx-background:none;
+    -fx-border:none;
+    -fx-font-size:1em;
+    -fx-color:blue;
+    -fx-color: #ffffff;
+    -fx-font-size: 12px;
+    -fx-text-decoration: none;
+}
+.button { -fx-focus-color: transparent; }
+
+.button:hover {
+  -fx-background:none;
+      -fx-border:none;
+      -fx-border-color:none;
+}
+.button:focused {
+  -fx-background:none;
+      -fx-border:none;
+}
+.button:focused {
+    -fx-border-color: white, white;
+    -fx-border-width: 0, 0;
+    -fx-border-style: solid, segments(1, 1);
+    -fx-border-radius: 0, 0;
+    -fx-border-insets: 0 0 0 0, 0;
+}
