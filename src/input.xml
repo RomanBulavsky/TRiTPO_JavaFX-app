@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <XmlSource>
-    <age>12</age>
     <user>
-        <login>John</login>
-        <password>Smith</password>
-        <tasks>Make some coffee  Is done</tasks>
-        <tasks>Start working</tasks>
-        <tasks>Azazaz Is done</tasks>
+        <login>John Smith</login>
+        <password>123</password>
+        <tasks>task to do  </tasks>
+        <tasks>Lol Is done</tasks>
+        <tasks>Make a cap of tea</tasks>
+    </user>
+    <user>
+        <login>Student</login>
+        <password>123</password>
+        <tasks>Get an credit  </tasks>
+        <tasks>new not started task </tasks>
     </user>
     <user>
         <login>zasasd</login>

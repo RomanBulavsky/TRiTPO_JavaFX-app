@@ -28,45 +28,7 @@ public class LoginController {
 
     private XmlUsers users;
 
-    /*public void test() throws JAXBException, IOException {
-        JAXBContext jc = JAXBContext.newInstance(XmlUsers.class);
-
-        Unmarshaller unmarshaller = jc.createUnmarshaller();
-        File xml = new File("src/input.xml");
-        xml.createNewFile();
-        //XmlConf xmlConf =(XmlConf) unmarshaller.unmarshal(xml);
-
-        XmlUsers xmlConf = new XmlUsers();
-        xmlConf.setAge(12);
-        List l = new LinkedList();
-        User u = new User();
-        u.setLogin("Vasa");
-        u.setPassword("123");
-        List<String> tasks = new LinkedList<String>();
-        tasks.add("Lol Is done");
-        tasks.add("Lol2 Is done");
-        tasks.add("Lasd");
-        tasks.add("Lxc");
-        List<String> tasks2 = new LinkedList<String>();
-        tasks2.add("2Lol Is done");
-        tasks2.add("2Lol2 Is done");
-        tasks2.add("2Lasd");
-        tasks2.add("2Lxc");
-        u.setTasks(tasks);
-        User u2 = new User();
-        u2.setTasks(tasks2);
-        u2.setLogin("zasasd");
-        u2.setPassword("1xxx1x1");
-        l.add(u);
-        l.add(u2);
-        xmlConf.setPersons(l);
-        Marshaller marshaller = jc.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(xmlConf, xml);
-
-    }*/
-
-    public IUsers test2() throws JAXBException, IOException {
+    public IUsers getUsers() throws JAXBException, IOException {
         JAXBContext jc = JAXBContext.newInstance(XmlUsers.class);
 
         Unmarshaller unmarshaller = jc.createUnmarshaller();
@@ -75,15 +37,12 @@ public class LoginController {
         XmlUsers xmlConf =(XmlUsers) unmarshaller.unmarshal(xml);
 
         List<User> list  = (List<User>) xmlConf.getPersons();
-        //Marshaller marshaller = jc.createMarshaller();
-        //marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        //marshaller.marshal(xmlConf, xml);
         return xmlConf;
     }
     @FXML
     public void onLogin(ActionEvent event) throws IOException, JAXBException {
-        //test();
-        users = (XmlUsers)test2();
+        //save();
+        users = (XmlUsers)getUsers();
         //savePersonDataToFile(getPersonFilePath());
 
         if(checkUser()) {
@@ -93,8 +52,13 @@ public class LoginController {
             Loader.load();
 
             ListController dc =  Loader.getController();
-            dc.setName(users.getPersons().get(0).getLogin() + " " + users.getPersons().get(0).getPassword());
-            dc.setGenericLinkedList(users.getPersons().get(0).getTasks());
+            //dc.setName(users.getPersons().get(0).getLogin());
+            for (User u :((XmlUsers)users).getPersons()) {
+                if(u.getLogin().equals(this.inputName.getText())){
+                    dc.setName(u.getLogin());
+                    dc.setGenericLinkedList(u.getTasks());
+                }
+            }
             dc.setUsers(users);
             root = Loader.getRoot();
             Scene rootScene = new Scene(root);

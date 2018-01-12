@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <XmlSource>
-    <age>12</age>
     <user>
-        <login>John</login>
-        <password>Smith</password>
-        <tasks>Make some coffee </tasks>
-        <tasks>Read emails Is done</tasks>
-        <tasks>Start working</tasks>
+        <login>John Smith</login>
+        <password>123</password>
+        <tasks>Make some coffee    Is done</tasks>
+        <tasks>Start working Is done</tasks>
+        <tasks>task to do  Is done</tasks>
     </user>
     <user>
         <login>zasasd</login>

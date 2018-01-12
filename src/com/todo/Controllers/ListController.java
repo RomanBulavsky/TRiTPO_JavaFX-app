@@ -1,6 +1,7 @@
 package com.todo.Controllers;
 
         import com.todo.Models.IUsers;
+        import com.todo.Models.User;
         import com.todo.Models.XmlUsers;
         import javafx.collections.FXCollections;
         import javafx.collections.ObservableList;
@@ -42,21 +43,24 @@ public class ListController {
     private ObservableList<String> genericLinkedList;
 
     private IUsers users;
-    //private ObservableList<String> observablelist;
 
     public void setUsers(IUsers users) {
         this.users = users;
     }
-    @FXML
-    public void LogoutButton(ActionEvent event) throws JAXBException, IOException {
-        test();
+
+    private Optional<ButtonType> Confirm(String title, String text, String header){
 
         Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Title");
-        alert.setHeaderText("Logout");
-        alert.setContentText("Are you ok with this?");
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(text);
 
-        Optional<ButtonType> result = alert.showAndWait();
+        return alert.showAndWait();
+    }
+    @FXML
+    public void LogoutButton(ActionEvent event) throws JAXBException, IOException {
+        save();
+        Optional<ButtonType> result = Confirm("Logout","Are you ok with this?", "Logout process");
         if (result.get() == ButtonType.OK){
             FXMLLoader Loader = new FXMLLoader();
             Parent root = null;
@@ -82,28 +86,22 @@ public class ListController {
         OnShow(null);
     }
 
-    public void test() throws JAXBException, IOException {
+    public void save() throws JAXBException, IOException {
         JAXBContext jc = JAXBContext.newInstance(XmlUsers.class);
 
         File xml = new File("src/input.xml");
 
-        //xml.delete();
-        //xml.createNewFile();
-        //XmlConf xmlConf =(XmlConf) unmarshaller.unmarshal(xml);
-
-//        Unmarshaller unmarshaller = jc.createUnmarshaller();
-//
-//        Users xmlConf =(Users) unmarshaller.unmarshal(xml);
-//
-//        List<User> list  = (List<User>) xmlConf.getPersons();
-
-
-        //List<User> list  = (List<User>) users.getPersons();
         Marshaller marshaller = jc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         List<String> l = (List<String>)genericLinkedList;
-        ((XmlUsers)users).getPersons().get(0).setTasks(l);
-        //marshaller.marshal(null,xml);
+
+        for (User u :((XmlUsers)users).getPersons()) {
+            if(u.getLogin().equals(this.Name.getText())){
+                u.setTasks(l);
+            }
+        }
+//        ((XmlUsers)users).getPersons().get(0).setTasks(l);
+
         try{
 
             marshaller.marshal(users, xml);
@@ -114,15 +112,13 @@ public class ListController {
             alert.showAndWait();
         }
 
-
-
-
     }
 
     public ListController(){
         genericLinkedList = FXCollections.observableArrayList();
         //observablelist = FXCollections.observableArrayList();
     }
+
     private void showInvalidDataAlert(Exception e) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("Invalid input data");
@@ -138,7 +134,10 @@ public class ListController {
         try {
             if(input.equals(""))
                 throw new Exception();
-            genericLinkedList.add(input);
+            Optional<ButtonType> result = Confirm("Creating new task","Are you ok with this?", "Add the task: " + input + " ?");
+            if(result.get() == ButtonType.OK){
+                genericLinkedList.add(input);
+            }
             inpuTextField.clear();
             OnShow(null);
         } catch (Exception e) {
@@ -147,39 +146,35 @@ public class ListController {
         }
     }
 
-
-    @FXML
-    public void OnDelete(ActionEvent event) {
-        String input = inpuTextField.getText();
-        try {
-            if(input.equals(""))
-                throw new Exception();
-            genericLinkedList.remove(input);
-            inpuTextField.clear();
-            OnShow(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            this.showInvalidDataAlert(e);
-        }
-    }
+//    @FXML
+//    public void OnDelete(ActionEvent event) {
+//        String input = inpuTextField.getText();
+//        try {
+//            if(input.equals(""))
+//                throw new Exception();
+//            genericLinkedList.remove(input);
+//            inpuTextField.clear();
+//            OnShow(null);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            this.showInvalidDataAlert(e);
+//        }
+//    }
 
     private void OnShow(ActionEvent event) {
-        //observablelist = FXCollections.observableArrayList(genericLinkedList);
         listView.setItems(genericLinkedList);
 
-        //Factory
         listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
             @Override
             public ListCell<String> call(ListView<String> param) {
                 XCell x = new XCell(genericLinkedList);
-                //x.setListView();
                 return x;
             }
         });
 
     }
 
-    static class XCell extends ListCell<String> {
+    class XCell extends ListCell<String> {
         HBox hbox = new HBox();
         Label label = new Label("(empty)");
         Pane pane = new Pane();
@@ -199,15 +194,16 @@ public class ListController {
                 @Override
                 public void handle(ActionEvent event) {
 
-                    for(int i = 0; i < listView.size(); i++)
-                    {
-                        String x = listView.get(i);
-                        if(x == label.getText()){
-                            listView.remove(i);
+                    Optional<ButtonType> result = Confirm("Removing","Are you ok with this?", "Remove the " + label.getText());
+                    if(result.get() == ButtonType.OK){
+                        for(int i = 0; i < listView.size(); i++)
+                        {
+                            String removableText = listView.get(i);
+                            if(removableText == label.getText()){
+                                listView.remove(i);
+                            }
                         }
                     }
-
-                    //System.out.println(x + " : " + event);
                 }
             });
             //Strategy!
@@ -217,9 +213,9 @@ public class ListController {
 
                     for(int i = 0; i < listView.size(); i++)
                     {
-                        String x = listView.get(i);
-                        if(x == label.getText()){
-                            if(x.contains("Is done")){
+                        String labelText = listView.get(i);
+                        if(labelText.equals(label.getText())){
+                            if(labelText.contains("Is done")){
                                 String s = String.format("%s",label.getText().replace("Is done",""));
                                 listView.set(i, s);
                                 break;
@@ -227,13 +223,8 @@ public class ListController {
 
                             String s = String.format("%s %s",label.getText(), "Is done");
                             listView.set(i, s);
-                            //listView.set(i, "xxx");
-                            //genericLinkedList.set(i, label.getText() + " is DONE!");
                         }
                     }
-                    //label = new Label("done");
-
-                    System.out.println(label + " : " + event);
                 }
             });
         }
@@ -246,17 +237,6 @@ public class ListController {
                 lastItem = null;
                 setGraphic(null);
             }
-//            } else if(item.contains("DONE")) {
-//                lastItem = item;
-//                label.setText(item!=null ? item : "<null>");
-//                //getStylesheets().add("/stylesheet.css");
-//                //this.setTextFill(Paint.valueOf("green"));
-//                //setStyle("xxx");
-//                getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
-//                //getStyleClass().add("xxx");
-//                PseudoClass inactive = PseudoClass.getPseudoClass("xxx");
-//                pseudoClassStateChanged(inactive, item != null && item.endsWith(" - not active"));
-//            }
             else{
                 lastItem = item;
                 if(item.contains("Is done"))
